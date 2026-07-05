@@ -112,7 +112,7 @@ from torch.utils.data import DataLoader
 transform = transforms. ToTensor()
 train_data=  datasets.MNIST(root="data",train=True,download=True,transform=transform)
 
-trian_loader = DataLoader(train_data,batch_size=64,shuffle=True)
+train_loader = DataLoader(train_data,batch_size=64,shuffle=True)
 
 model = nn.Sequential(nn.Flatten(),nn.Linear(28*28,128),nn.ReLU(),nn.Linear(128,10))
 
@@ -123,7 +123,7 @@ epochs = 3
 for epoch in range(epochs):
      total_loss = 0
 
-     for images,labels in trian_loader:
+     for images,labels in train_loader:
 
          outputs = model(images)
 
@@ -136,6 +136,30 @@ for epoch in range(epochs):
          total_loss += loss.item()
 
      print(f"Epoch {epoch+1}, Loss: {total_loss:.4f}")
+
+
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
+
+transform = transforms.ToTensor()
+
+test_data = datasets.MNIST(root="data",train=False,download=True,transform=transform)
+test_loader = DataLoader(test_data,batch_size=64,shuffle=False)
+
+
+correct = 0
+total = 0
+with torch.no_grad():
+    for images,labels in test_loader:
+        outputs = model(images)
+        _, predicted = torch.max(outputs,1)
+
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
+
+accuracy = 100 * correct / total
+print(f"Accuracy: {accuracy:.2f}%")
+
 
 
 
