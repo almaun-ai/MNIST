@@ -161,6 +161,21 @@ accuracy = 100 * correct / total
 print(f"Accuracy: {accuracy:.2f}%")
 
 
+import matplotlib.pyplot as plt
+from torchvision import datasets, transforms
+
+transform = transforms.Compose([transforms.ToTensor()])
+
+train_data = datasets.MNIST(root="data",train=True,download=True,transform=transform)
+
+image,label = train_data[0]
+print("Label:",label)
+print("Image Shape:", image.shape)
+
+plt.imshow(image.squeeze(),cmap="gray")
+plt.title(f"Label: {label}")
+plt.axis("off")
+plt.show()
 
 
 
